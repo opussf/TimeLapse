@@ -42,14 +42,8 @@ function TL.ADDON_LOADED()
 	TL.Print("Loaded: "..time())
 end
 function TL.SCREENSHOT_FAILED()
-	if TL_Options.Debug then
-		TL.Print("Screenshot failed")
-	end
 end
 function TL.SCREENSHOT_SUCCEEDED()
-	if TL_Options.Debug then
-		TL.Print("Screenshot succeeded")
-	end
 end
 function TL.OnUpdate()
 	if TL_Options.Enabled then
