@@ -16,12 +16,13 @@ COLOR_END = "|r";
 
 TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = 1, }
 TL = {}
+TL.LastCapture = 0
 
 function TL.Print( msg, showName)
 	-- print to the chat frame
 	-- set showName to false to suppress the addon name printing
 	if (showName == nil) or (showName) then
-		msg = COLOR_PURPLE..INEED_MSG_ADDONNAME.."> "..COLOR_END..msg
+		msg = COLOR_PURPLE..TIMELAPSE_MSG_ADDONNAME.."> "..COLOR_END..msg
 	end
 	DEFAULT_CHAT_FRAME:AddMessage( msg )
 end
@@ -29,13 +30,15 @@ function TL.OnLoad()
 	SLASH_TIMELAPSE1 = "/TIMELAPSE"
 	SLASH_TIMELAPSE2 = "/TL"
 	SlashCmdList["TIMELAPSE"] = function(msg) TL.command(msg); end
+	TIMELAPSE_Frame:RegisterEvent("ADDON_LOADED")
 end
 --------------
 function TL.ADDON_LOADED()
 	-- Unregister the event for this method.
 	TIMELAPSE_Frame:UnregisterEvent("ADDON_LOADED")
 
-	TL.Print("Loaded")
+	TL.Print("Loaded: "..time())
+	TL.Print("I am "..(TL_Options.Enabled and "Enabled" or "Disabled")..".")
 end
 function TL.OnUpdate()
 	if TL_Options.Enabled then
@@ -77,11 +80,17 @@ function TL.PrintHelp()
 			SLASH_TIMELAPSE1, cmd, info.help[1], info.help[2]));
 	end
 end
+function TL.Status()
+end
 -- this needs to be at the end because it is referencing functions
 TL.CommandList = {
 	["help"] = {
 		["func"] = TL.PrintHelp,
 		["help"] = {"","Print this help."},
+	},
+	["status"] = {
+		["func"] = TL.Status,
+		["help"] = {"","Show Status"},
 	},
 	["debug"] = {
 		["func"] = function() TL_Options.Debug = not TL_Options.Debug; TL_Print("Debug is "..(TL_Options.Debug and "On" or "Off")); end,
