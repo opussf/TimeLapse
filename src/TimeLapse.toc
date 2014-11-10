@@ -1,0 +1,9 @@
+## Interface: @INTERFACE@
+## Title: TimeLapse
+## Notes: Captures a screen shot every so often. v@VERSION@
+## Author: opussf
+## Version: @VERSION@
+## Description: Captures a screen shot every so often. v@VERSION@
+## SavedVariablesPerCharacter: TL_Options
+TimeLapse.lua
+TimeLapse.xml
