@@ -31,6 +31,8 @@ function TL.OnLoad()
 	SLASH_TIMELAPSE2 = "/TL"
 	SlashCmdList["TIMELAPSE"] = function(msg) TL.command(msg); end
 	TIMELAPSE_Frame:RegisterEvent("ADDON_LOADED")
+	TIMELAPSE_Frame:RegisterEvent("SCREENSHOT_SUCCEEDED")
+	TIMELAPSE_Frame:RegisterEvent("SCREENSHOT_FAILED")
 end
 --------------
 function TL.ADDON_LOADED()
@@ -38,7 +40,16 @@ function TL.ADDON_LOADED()
 	TIMELAPSE_Frame:UnregisterEvent("ADDON_LOADED")
 
 	TL.Print("Loaded: "..time())
-	TL.Print("I am "..(TL_Options.Enabled and "Enabled" or "Disabled")..".")
+end
+function TL.SCREENSHOT_FAILED()
+	if TL_Options.Debug then
+		TL.Print("Screenshot failed")
+	end
+end
+function TL.SCREENSHOT_SUCCEEDED()
+	if TL_Options.Debug then
+		TL.Print("Screenshot succeeded")
+	end
 end
 function TL.OnUpdate()
 	if TL_Options.Enabled then
@@ -74,13 +85,16 @@ function TL.command(msg)
 	end
 end
 function TL.PrintHelp()
-	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR);
+	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR)
 	for cmd, info in pairs(TL.CommandList) do
 		TL.Print(string.format("%s %s %s -> %s",
 			SLASH_TIMELAPSE1, cmd, info.help[1], info.help[2]));
 	end
 end
 function TL.Status()
+	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR)
+	TL.Print("Screen Capture every "..TL_Options.Delay.." seconds")
+	TL.Print("I am "..(TL_Options.Enabled and "Enabled" or "Disabled")..".")
 end
 -- this needs to be at the end because it is referencing functions
 TL.CommandList = {
@@ -93,8 +107,20 @@ TL.CommandList = {
 		["help"] = {"","Show Status"},
 	},
 	["debug"] = {
-		["func"] = function() TL_Options.Debug = not TL_Options.Debug; TL_Print("Debug is "..(TL_Options.Debug and "On" or "Off")); end,
+		["func"] = function() TL_Options.Debug = not TL_Options.Debug; TL.Print("Debug is "..(TL_Options.Debug and "On" or "Off")); end,
 		["help"] = {"","Toggles the debug status"},
+	},
+	["disable"] = {
+		["func"] = function() TL_Options.Enabled = nil; TL.Status(); end,
+		["help"] = {"","Disable taking screenshots"},
+	},
+	["enable"] = {
+		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
+		["help"] = {"","Enable taking screenshots"},
+	},
+	["delay"] = {
+		["func"] = function(param) param=tonumber(param); if param<=0 then param=1 end; TL_Options.Delay = tointeger(param); end,
+		["help"] = {"Integer","Set the capture delay to number of seconds"}
 	},
 }
 
