@@ -14,7 +14,7 @@ COLOR_GOLD = "|cffcfb52b";
 COLOR_NEON_BLUE = "|cff4d4dff";
 COLOR_END = "|r";
 
-TL_Options = {}
+TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = 1, }
 TL = {}
 
 function TL.Print( msg, showName)
@@ -38,6 +38,15 @@ function TL.ADDON_LOADED()
 	TL.Print("Loaded")
 end
 function TL.OnUpdate()
+	if TL_Options.Enabled then
+		if time() >= TL.LastCapture + TL_Options.Delay then -- Capture an image
+			TL.LastCapture = time()
+			Screenshot()
+			if TL_Options.Debug then
+				TL.Print("Captured a screenshot")
+			end
+		end
+	end
 end
 -- Non Event functions
 function TL.parseCmd(msg)
@@ -73,6 +82,10 @@ TL.CommandList = {
 	["help"] = {
 		["func"] = TL.PrintHelp,
 		["help"] = {"","Print this help."},
+	},
+	["debug"] = {
+		["func"] = function() TL_Options.Debug = not TL_Options.Debug; TL_Print("Debug is "..(TL_Options.Debug and "On" or "Off")); end,
+		["help"] = {"","Toggles the debug status"},
 	},
 }
 
