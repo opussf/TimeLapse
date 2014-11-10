@@ -14,7 +14,7 @@ COLOR_GOLD = "|cffcfb52b";
 COLOR_NEON_BLUE = "|cff4d4dff";
 COLOR_END = "|r";
 
-TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = 1, }
+TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = nil, }
 TL = {}
 TL.LastCapture = 0
 
@@ -49,7 +49,7 @@ function TL.OnUpdate()
 	if TL_Options.Enabled then
 		if time() >= TL.LastCapture + TL_Options.Delay then -- Capture an image
 			TL.LastCapture = time()
-			Screenshot()
+			TakeScreenshot()
 			if TL_Options.Debug then
 				TL.Print("Captured a screenshot")
 			end
