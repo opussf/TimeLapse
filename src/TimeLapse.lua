@@ -114,7 +114,7 @@ TL.CommandList = {
 		["help"] = {"","Enable taking screenshots"},
 	},
 	["delay"] = {
-		["func"] = function(param) if param then param=tonumber(param); if param<=0 then param=1 end; TL_Options.Delay = param; TL.Status(); end; end,
+		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL.Status(); end; end,
 		["help"] = {"Integer","Set the capture delay to number of seconds"}
 	},
 }
