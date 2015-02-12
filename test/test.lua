@@ -14,6 +14,7 @@ package.path = "../src/?.lua;'" .. package.path
 require "TimeLapse"
 
 function test.before()
+	TL.OnLoad()
 end
 function test.after()
 end
@@ -42,6 +43,12 @@ end
 function test.test_SetDelay_180()
 	TL.command("delay 180")
 	assertEquals( 180, TL_Options.Delay )
+end
+function test.test_Help()
+	TL.command("help")
+end
+function test.test_NoCommand()
+	TL.command(" ")
 end
 
 
