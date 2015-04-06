@@ -72,6 +72,9 @@ function TL.parseCmd(msg)
 end
 function TL.command(msg)
 	local cmd, param = TL.parseCmd(msg);
+	if TL.CommandList[cmd] and TL.CommandList[cmd].alias then
+		cmd = TL.CommandList[cmd].alias
+	end
 	local cmdFunc = TL.CommandList[cmd];
 	if cmdFunc then
 		cmdFunc.func(param);
@@ -82,8 +85,16 @@ end
 function TL.PrintHelp()
 	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR)
 	for cmd, info in pairs(TL.CommandList) do
-		TL.Print(string.format("%s %s %s -> %s",
-			SLASH_TIMELAPSE1, cmd, info.help[1], info.help[2]));
+		if info.help then
+			local cmdStr = cmd
+			for c2, i2 in pairs(TL.CommandList) do
+				if i2.alias and i2.alias == cmd then
+					cmdStr = string.format( "%s / %s", cmdStr, c2 )
+				end
+			end
+			TL.Print(string.format("%s %s %s -> %s",
+				SLASH_TIMELAPSE1, cmdStr, info.help[1], info.help[2]));
+		end
 	end
 end
 function TL.Status()
@@ -114,12 +125,10 @@ TL.CommandList = {
 		["help"] = {"","Enable taking screenshots"},
 	},
 	["off"] = {
-		["func"] = function() TL_Options.Enabled = nil; TL.Status(); end,
-		["help"] = {"","Disable taking screenshots"},
+		["alias"] = "disable",
 	},
 	["on"] = {
-		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
-		["help"] = {"","Enable taking screenshots"},
+		["alias"] = "enable",
 	},
 	["delay"] = {
 		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL.Status(); end; end,
