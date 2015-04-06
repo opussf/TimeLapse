@@ -29,6 +29,15 @@ function test.test_SetEnable()
 	TL.command("enable")
 	assertTrue( TL_Options.Enabled )
 end
+function test.test_SetOff()
+	TL.command("off")
+	assertIsNil( TL_Options.Enabled )
+end
+function test.test_SetOn()
+	TL_Options.Enabled = nil
+	TL.command("on")
+	assertTrue( TL_Options.Enabled )
+end
 function test.test_Status()
 	TL.command("status")
 end
