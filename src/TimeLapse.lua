@@ -113,6 +113,14 @@ TL.CommandList = {
 		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
 		["help"] = {"","Enable taking screenshots"},
 	},
+	["off"] = {
+		["func"] = function() TL_Options.Enabled = nil; TL.Status(); end,
+		["help"] = {"","Disable taking screenshots"},
+	},
+	["on"] = {
+		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
+		["help"] = {"","Enable taking screenshots"},
+	},
 	["delay"] = {
 		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL.Status(); end; end,
 		["help"] = {"Integer","Set the capture delay to number of seconds"}
