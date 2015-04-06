@@ -8,6 +8,7 @@ require "wowTest"
 test.outFileName = "testOut.xml"
 
 -- Figure out how to parse the XML here, until then....
+TIMELAPSE_Frame = Frame
 
 -- require the file to test
 package.path = "../src/?.lua;'" .. package.path
