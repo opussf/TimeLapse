@@ -40,6 +40,7 @@ function TL.ADDON_LOADED()
 	TIMELAPSE_Frame:UnregisterEvent("ADDON_LOADED")
 
 	TL.Print("Loaded: "..time())
+	TL.Status()
 end
 function TL.SCREENSHOT_FAILED()
 end
@@ -87,7 +88,7 @@ function TL.PrintHelp()
 end
 function TL.Status()
 	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR)
-	TL.Print("Screen Capture every "..TL_Options.Delay.." seconds")
+	TL.Print( "Screen Capture every "..SecondsToTime(TL_Options.Delay,false,false,5) )
 	TL.Print("I am "..(TL_Options.Enabled and "Enabled" or "Disabled")..".")
 end
 -- this needs to be at the end because it is referencing functions
@@ -112,8 +113,16 @@ TL.CommandList = {
 		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
 		["help"] = {"","Enable taking screenshots"},
 	},
+	["off"] = {
+		["func"] = function() TL_Options.Enabled = nil; TL.Status(); end,
+		["help"] = {"","Disable taking screenshots"},
+	},
+	["on"] = {
+		["func"] = function() TL_Options.Enabled = 1; TL.Status(); end,
+		["help"] = {"","Enable taking screenshots"},
+	},
 	["delay"] = {
-		["func"] = function(param) param=tonumber(param); if param<=0 then param=1 end; TL_Options.Delay = param; end,
+		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL.Status(); end; end,
 		["help"] = {"Integer","Set the capture delay to number of seconds"}
 	},
 }
