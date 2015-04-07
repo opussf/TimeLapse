@@ -83,7 +83,7 @@ function TL.command(msg)
 	end
 end
 function TL.PrintHelp()
-	TL.Print(TIMELAPSE_MSG_ADDONNAME.." by "..TIMELAPSE_MSG_AUTHOR)
+	TL.Print( string.format( "%s (%s) by %s", TIMELAPSE_MSG_ADDONNAME, TIMELAPSE_MSG_VERSION, TIMELAPSE_MSG_AUTHOR ) )
 	for cmd, info in pairs(TL.CommandList) do
 		if info.help then
 			local cmdStr = cmd
