@@ -9,3 +9,5 @@ These images can then be stiched together to create a timelapse film.
 
 WARNING!
 This has the ability to fill your storage device where World of Warcraft is installed in a hurry!
+
+Currently, WoW will crash if this addon tries to capture a screen shot while tabbed out.  Please be careful.
