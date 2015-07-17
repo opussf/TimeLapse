@@ -50,7 +50,7 @@ function TL.OnUpdate()
 	if TL_Options.Enabled then
 		if time() >= TL.LastCapture + TL_Options.Delay then -- Capture an image
 			TL.LastCapture = time()
-			TakeScreenshot()
+			Screenshot()
 			if TL_Options.Debug then
 				TL.Print("Captured a screenshot")
 			end
