@@ -54,12 +54,17 @@ class MyThumb {
 	function setQuiet( $quiet ) {
 		$this->quiet = $quiet;
 	}
+	function log( $str, $override=False ) {
+		if( !$this->quiet or $override ) {
+			fwrite( $this->fhLog, $str );
+		}
+	}
 	function processImage( $image_name ) {
 		$len = strlen( $image_name );
 		$pos = strrpos( $image_name, "." );
 		$type = strtoupper( substr( $image_name, $pos+1, $len ) );
 		$d = date("d M Y H:i:s");
-		fwrite( $this->fhLog, "$d\t$image_name\t" );
+		$this->log( "$d\t$image_name\t" );
 
 		# fid the size of the largest of the arrays
 		$index = max( count( $this->awidth ), count( $this->aheight ) );
@@ -89,9 +94,9 @@ class MyThumb {
 							case "JPEG":
 							case "JPG":
 								ImageJPEG( $im, $thumb_name ) or die( "Problem in saving JPEG" );
-								fwrite( $this->fhLog, "CJ $s ");
+								$this->log( "CJ $s ");
 								if( $lcv == 1 and !$this->quiet ) {  # last one
-									fwrite( $this->fhLog, "DJ $s\n" );
+									$this->log( "DJ $s\n" );
 									#display jpg
 									header( "Content-type: image/jpeg" );
 									ImageJPEG( $im );
@@ -100,9 +105,9 @@ class MyThumb {
 								break;
 							case "PNG":
 								ImagePNG( $im, $thumb_name ) or die( "Problem in saving PNG" );
-								fwrite( $this->fhLog, "CP $s ");
+								$this->log( "CP $s ");
 								if( $lcv == 1 and !$this->quiet ) { # last one
-									fwrite( $this->fhLog, "DP $s\n" );
+									$this->log( "DP $s\n" );
 									# display png
 									header( "Content-type: image/png" );
 									ImagePNG( $im );
@@ -114,9 +119,9 @@ class MyThumb {
 						}
 					} else { # create a 0 size file
 						fclose( fopen( $thumb_name, "w" ) );
-						fwrite( $this->fhLog, "CZ $s " );
+						$this->log( "CZ $s " );
 						if( $lcv == 1 and !$this->quiet ) {
-							fwrite( $this->fhLog, "DZ $s\n" );
+							$this->log( "DZ $s\n" );
 							header( "Location: $image_name" );
 							exit;
 						}
@@ -128,11 +133,11 @@ class MyThumb {
 		#print( "\n<br/>Return $thumb_name" );
 		# this better exist... just spent some time making it....
 		if( filesize( $thumb_name ) > 0 ) {
-			fwrite( $this->fhLog, "LT $s\n" );
+			$this->log( "LT $s\n" );
 			if( !$this->quiet ) { header( "Location: $thumb_name" ); }  # load the thumb 
 			#exit;
 		} else { #file size is 0
-			fwrite( $this->fhLog, "LO\n" );
+			$this->log( "LO\n" );
 			if( !$this->quiet ) { header( "Lodation: $image_name" ); } # load the original
 			#exit;
 		}
@@ -156,11 +161,11 @@ class MyThumb {
 				case "JPEG":
 				case "JPG":
 					$this->file_src = ImageCreateFromJPEG( $image_name ) or
-						 die( fwrite( $this->fhLog, "\tProblem in opening source JPEG\n" ) );
+						 die( $this->log( "\tProblem in opening source JPEG\n" ) );
 					break;
 				case "PNG":
 					$this->file_src = ImageCreateFromPNG( $image_name ) or
-						 die( fwrite( $this->fhLog, "\tProblem in opening source PNG\n" ) );
+						 die( $this->log( "\tProblem in opening source PNG\n" ) );
 					break;
 				default:
 					die( "File Type not supported" );
@@ -191,11 +196,6 @@ class MyThumb {
 			return False;
 		}
 		return True;
-	}
-	private function log( $str ) {
-		if( !$this->quiet ) {
-			fwrite( $this->fhLog, $str );
-		}
 	}
 
 }

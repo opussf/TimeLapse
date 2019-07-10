@@ -39,12 +39,15 @@ foreach( $afiles as $fname ) {
 
 $numFiles = count( $afiles );
 $endtime = microtime( true );
-printf( "%s Processed % 4d files in % 6.2f seconds (%0.2f/s)",
+$outstr = sprintf( "%s Processed % 4d files in % 6.2f seconds (%0.2f/s)\n",
 		date( "r", $starttime ), 
 		$numFiles, 
 		($endtime - $starttime),
 		$numFiles / ($endtime - $starttime)
 );
+print( $outstr );
+
+$mythumb->log( $outstr, True );
 
 ?>
 
