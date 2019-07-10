@@ -26,6 +26,7 @@
 # C = Created  J = JPG    P = PNG    Z = Zero size
 # D = Display
 
+
 class MyThumb {
 	public $new_height = 100;
 	public $thumb_dir = "./imgs/thumbs";
@@ -37,10 +38,13 @@ class MyThumb {
 			chmod( $this->thumb_dir, 0777 );
 		}
 		if( !$this->fhLog ) {
+			fclose( fopen( $this->log_file_name, "a" ) );
+			@chmod( $this->log_file_name, 0666 );
 			$this->fhLog = fopen( $this->log_file_name, "a" );
 		}
 	}
 	function setSizes( $widths, $heights ) {
+		# both are comma seperated string
 		$this->awidth =explode( ",", $widths );
 		$this->aheight=explode( ",", $heights );
 		if( $this->awidth[0] == "" and $this->aheight[0] == "" ) {
@@ -126,11 +130,11 @@ class MyThumb {
 		if( filesize( $thumb_name ) > 0 ) {
 			fwrite( $this->fhLog, "LT $s\n" );
 			if( !$this->quiet ) { header( "Location: $thumb_name" ); }  # load the thumb 
-			exit;
+			#exit;
 		} else { #file size is 0
 			fwrite( $this->fhLog, "LO\n" );
 			if( !$this->quiet ) { header( "Lodation: $image_name" ); } # load the original
-			exit;
+			#exit;
 		}
 	}
 	private function make_thumb_name( $fname, $w, $h ) {
@@ -188,10 +192,19 @@ class MyThumb {
 		}
 		return True;
 	}
+	private function log( $str ) {
+		if( !$this->quiet ) {
+			fwrite( $this->fhLog, $str );
+		}
+	}
 
 }
 
 
+#var_dump( $_SERVER["SCRIPT_FILENAME"] );
+#var_dump( __FILE__ );
+
+if( __FILE__ == $_SERVER["SCRIPT_FILENAME"] ) {
 $image_name=$_GET['fname'];
 $width=$_GET['w'];
 $height=$_GET['h'];
@@ -202,5 +215,8 @@ $mythumb->setQuiet( $quiet );
 
 $mythumb->setSizes( $width, $height );
 $mythumb->processImage( $image_name );
-
+} else {
+// Turn off all error reporting
+error_reporting(0);
+}
 ?>

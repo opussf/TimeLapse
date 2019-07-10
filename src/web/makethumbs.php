@@ -1,8 +1,10 @@
 <?php
 
+require( "mythumb.php" );
+
 $starttime = microtime( true );  # return as float
 
-$makeSizes = array( 1440, 1200, 1000, 720, 640, 320 );
+$makeSizes = array( "1440", "1200", "1000", "720", "640", "320" );
 
 #build the list of slides
 $img_dir = "imgs";
@@ -16,18 +18,23 @@ foreach( $all as $file ) {
 	}
 }
 
+$mythumb = new MyThumb();
+$mythumb->setQuiet( True );
+$mythumb->setSizes( join( ",",$makeSizes ) );
+
 $urlBase = "http://127.0.0.1/~opus/wowshots/mythumb.php";
 $widthStr = "w=".join(",",$makeSizes);
 $urlBase = $urlBase."?".$widthStr."&q=true";
 
+
 foreach( $afiles as $fname ) {
+	$mythumb->processImage( $fname );
 	# make the URL
 	$fname = "fname=$fname";
 	$requestURL = $urlBase."&".$fname;
 
 	# request the file
-	$thumb = fopen( $requestURL, 'r' );
-	fclose( $thumb );
+	#fclose( fopen( $requestURL, 'r' ) );
 }
 
 $numFiles = count( $afiles );
