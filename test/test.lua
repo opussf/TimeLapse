@@ -1,8 +1,5 @@
 #!/usr/bin/env lua
 
-addonData = { ["Version"] = "1.0",
-}
-
 require "wowTest"
 
 test.outFileName = "testOut.xml"
@@ -11,8 +8,7 @@ test.outFileName = "testOut.xml"
 TIMELAPSE_Frame = Frame
 
 -- require the file to test
-package.path = "../src/?.lua;'" .. package.path
-require "TimeLapse"
+ParseTOC( "../src/TimeLapse.toc" )
 
 function test.before()
 	TL.OnLoad()
