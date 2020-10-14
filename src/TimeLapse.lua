@@ -1,6 +1,7 @@
-TIMELAPSE_MSG_ADDONNAME = "TimeLapse";
-TIMELAPSE_MSG_VERSION   = GetAddOnMetadata(TIMELAPSE_MSG_ADDONNAME,"Version");
-TIMELAPSE_MSG_AUTHOR    = "opussf";
+TIMELAPSE_SLUG, TL = ...
+TIMELAPSE_MSG_ADDONNAME = GetAddOnMetadata( TIMELAPSE_SLUG, "Title" )
+TIMELAPSE_MSG_VERSION   = GetAddOnMetadata( TIMELAPSE_SLUG, "Version" )
+TIMELAPSE_MSG_AUTHOR    = GetAddOnMetadata( TIMELAPSE_SLUG, "Author" )
 
 -- Colours
 COLOR_RED = "|cffff0000";
@@ -15,7 +16,6 @@ COLOR_NEON_BLUE = "|cff4d4dff";
 COLOR_END = "|r";
 
 TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = nil, }
-TL = {}
 TL.LastCapture = 0
 
 function TL.Print( msg, showName)
@@ -35,12 +35,14 @@ function TL.OnLoad()
 	TIMELAPSE_Frame:RegisterEvent("SCREENSHOT_FAILED")
 end
 --------------
-function TL.ADDON_LOADED()
-	-- Unregister the event for this method.
-	TIMELAPSE_Frame:UnregisterEvent("ADDON_LOADED")
+function TL.ADDON_LOADED( _, arg1 )
+	if( arg1 == TIMELAPSE_SLUG ) then
+		-- Unregister the event for this method.
+		TIMELAPSE_Frame:UnregisterEvent("ADDON_LOADED")
 
-	TL.Print("Loaded: "..time())
-	TL.Status()
+		TL.Print(TIMELAPSE_MSG_VERSION.." Loaded: "..time())
+		TL.Status()
+	end
 end
 function TL.SCREENSHOT_FAILED()
 end

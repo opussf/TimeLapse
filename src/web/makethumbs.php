@@ -39,7 +39,7 @@ foreach( $afiles as $fname ) {
 
 $numFiles = count( $afiles );
 $endtime = microtime( true );
-$outstr = sprintf( "%s Processed % 4d files in % 6.2f seconds (%0.2f/s)\n",
+$outstr = sprintf( "%s Processed % 4d files in % 6.2f seconds (%0.2f/s)",
 		date( "r", $starttime ), 
 		$numFiles, 
 		($endtime - $starttime),

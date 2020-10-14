@@ -3,7 +3,7 @@
 # Charles Gordon
 # 18 June 2004
 #########################################
-# Parameters: 
+# Parameters:
 # fname = Filename of image to thumbnail
 # w = desired width
 # h = desired height
@@ -60,6 +60,7 @@ class MyThumb {
 		}
 	}
 	function processImage( $image_name ) {
+		unset( $this->file_src );
 		$len = strlen( $image_name );
 		$pos = strrpos( $image_name, "." );
 		$type = strtoupper( substr( $image_name, $pos+1, $len ) );
@@ -82,13 +83,13 @@ class MyThumb {
 					#print( "\nImage is loaded" );
 					if( $this->set_w_h( $w, $h ) ) {
 						#print( "resize image to ".$this->new_width."x".$this->new_height );
-						$im = ImageCreatetruecolor( $this->new_width, $this->new_height) 
+						$im = ImageCreatetruecolor( $this->new_width, $this->new_height)
 								or die( "Problem in creating image" );
-						ImageCopyResized( $im, $this->file_src, 
-								0, 0, 0, 0, 
-								$this->new_width, $this->new_height, 
-								ImageSX( $this->file_src ), 
-								ImageSY( $this->file_src ) ) 
+						ImageCopyResized( $im, $this->file_src,
+								0, 0, 0, 0,
+								$this->new_width, $this->new_height,
+								ImageSX( $this->file_src ),
+								ImageSY( $this->file_src ) )
 								or die( "Problem in resizing" );
 						switch( $this->file_type ) {
 							case "JPEG":
@@ -129,16 +130,16 @@ class MyThumb {
 				}
 			}
 		}
-		
+
 		#print( "\n<br/>Return $thumb_name" );
 		# this better exist... just spent some time making it....
 		if( filesize( $thumb_name ) > 0 ) {
 			$this->log( "LT $s\n" );
-			if( !$this->quiet ) { header( "Location: $thumb_name" ); }  # load the thumb 
+			if( !$this->quiet ) { header( "Location: $thumb_name" ); }  # load the thumb
 			#exit;
 		} else { #file size is 0
 			$this->log( "LO\n" );
-			if( !$this->quiet ) { header( "Lodation: $image_name" ); } # load the original
+			if( !$this->quiet ) { header( "Location: $image_name" ); } # load the original
 			#exit;
 		}
 	}
@@ -180,7 +181,7 @@ class MyThumb {
 		$y = ImageSY( $this->file_src );
 		$ratio = $x / $y;
 
-		if( !empty( $w ) ) { # width is given 
+		if( !empty( $w ) ) { # width is given
 			$this->new_width = $w;
 			$this->new_height = $w / $ratio;
 		}
@@ -192,7 +193,7 @@ class MyThumb {
 
 		#printf( "New size: %s x %s\n<br/>", $this->new_width, $this->new_height );
 		if( ( $this->new_width >= $x ) or ( $this->new_height >= $y ) ) {
-			# cannot resize larger than original 
+			# cannot resize larger than original
 			return False;
 		}
 		return True;
@@ -208,7 +209,7 @@ if( __FILE__ == $_SERVER["SCRIPT_FILENAME"] ) {
 $image_name=$_GET['fname'];
 $width=$_GET['w'];
 $height=$_GET['h'];
-$quiet=is_null($_GET['q']) ? false : true; 
+$quiet=is_null($_GET['q']) ? false : true;
 
 $mythumb = new MyThumb();
 $mythumb->setQuiet( $quiet );
