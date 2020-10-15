@@ -5,7 +5,7 @@
 	<property environment="env"/>
 	<property name="env.BUILD_NUMBER" value=""/>
 	<property name="build.number" value=""/>
-	<property name="addon.dir" location="/Applications/World of Warcraft/Interface/Addons/${ant.project.name}"/>
+	<property name="addon.dir" location="${ADDONLOC}/${ant.project.name}"/>
 	<!--  Pull git repo info -->
 	<exec executable="git" dir="." outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
 		<arg line="describe --tags --always HEAD" />
@@ -94,7 +94,10 @@
 
 	<target name="wow" depends="test" description="copy files to currnet wow install">
 		<mkdir dir="${addon.dir}"/>
-		<copy todir="${addon.dir}" filtering="true">
+		<delete>
+			<fileset dir="${addon.dir}" includes="*.toc"/>
+		</delete>
+		<copy todir="${addon.dir}" filtering="true" verbose="true">
 			<fileset dir="src">
 				<include name="*.lua"/>
 				<include name="*.toc"/>
@@ -102,6 +105,7 @@
 				<include name="Readme.txt"/>
 			</fileset>
 		</copy>
+		<echo>Deployed ${version.number} locally</echo>
 	</target>
 
 	<target name="open" description="open the addon dir in the current wow install">
