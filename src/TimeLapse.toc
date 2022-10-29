@@ -1,6 +1,6 @@
-## Title: TimeLapse v@VERSION@
+## Title: TimeLapse
 ## Interface: @INTERFACE@
-## Notes: Captures a screen shot every so often. v@VERSION@
+## Notes: Captures a screen shot every so often. (@VERSION@)
 ## Author: opussf
 ## Version: @VERSION@
 ## Description: Captures a screen shot every so often. v@VERSION@
