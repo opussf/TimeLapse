@@ -4,16 +4,16 @@ TIMELAPSE_MSG_VERSION   = GetAddOnMetadata( TIMELAPSE_SLUG, "Version" )
 TIMELAPSE_MSG_AUTHOR    = GetAddOnMetadata( TIMELAPSE_SLUG, "Author" )
 
 -- Colours
-COLOR_RED = "|cffff0000";
-COLOR_GREEN = "|cff00ff00";
-COLOR_BLUE = "|cff0000ff";
-COLOR_PURPLE = "|cff700090";
-COLOR_YELLOW = "|cffffff00";
-COLOR_ORANGE = "|cffff6d00";
-COLOR_GREY = "|cff808080";
-COLOR_GOLD = "|cffcfb52b";
-COLOR_NEON_BLUE = "|cff4d4dff";
-COLOR_END = "|r";
+COLOR_RED = "|cffff0000"
+COLOR_GREEN = "|cff00ff00"
+COLOR_BLUE = "|cff0000ff"
+COLOR_PURPLE = "|cff700090"
+COLOR_YELLOW = "|cffffff00"
+COLOR_ORANGE = "|cffff6d00"
+COLOR_GREY = "|cff808080"
+COLOR_GOLD = "|cffcfb52b"
+COLOR_NEON_BLUE = "|cff4d4dff"
+COLOR_END = "|r"
 
 TL_Options = { ["Enabled"] = 1, ["Delay"] = 60, ["Debug"] = nil, }
 TL.LastCapture = 0
@@ -73,13 +73,13 @@ function TL.parseCmd(msg)
 	end
 end
 function TL.command(msg)
-	local cmd, param = TL.parseCmd(msg);
+	local cmd, param = TL.parseCmd(msg)
 	if TL.CommandList[cmd] and TL.CommandList[cmd].alias then
 		cmd = TL.CommandList[cmd].alias
 	end
-	local cmdFunc = TL.CommandList[cmd];
+	local cmdFunc = TL.CommandList[cmd]
 	if cmdFunc then
-		cmdFunc.func(param);
+		cmdFunc.func(param)
 	else
 		TL.PrintHelp()
 	end
@@ -95,12 +95,11 @@ function TL.PrintHelp()
 				end
 			end
 			TL.Print(string.format("%s %s %s -> %s",
-				SLASH_TIMELAPSE1, cmdStr, info.help[1], info.help[2]));
+				SLASH_TIMELAPSE1, cmdStr, info.help[1], info.help[2]))
 		end
 	end
 end
 function TL.Status()
-	--TL.Print( string.format( "%s (%s) by %s", TIMELAPSE_MSG_ADDONNAME, TIMELAPSE_MSG_VERSION, TIMELAPSE_MSG_AUTHOR ) )
 	TL.Print( "Screen Capture every "..SecondsToTime(TL_Options.Delay,false,false,5).."("..( TL_Options.Enabled and "Enabled" or "Disabled" )..")" )
 end
 -- this needs to be at the end because it is referencing functions
