@@ -100,9 +100,8 @@ function TL.PrintHelp()
 	end
 end
 function TL.Status()
-	TL.Print( string.format( "%s (%s) by %s", TIMELAPSE_MSG_ADDONNAME, TIMELAPSE_MSG_VERSION, TIMELAPSE_MSG_AUTHOR ) )
-	TL.Print( "Screen Capture every "..SecondsToTime(TL_Options.Delay,false,false,5) )
-	TL.Print( "I am "..( TL_Options.Enabled and "Enabled" or "Disabled" ).."." )
+	--TL.Print( string.format( "%s (%s) by %s", TIMELAPSE_MSG_ADDONNAME, TIMELAPSE_MSG_VERSION, TIMELAPSE_MSG_AUTHOR ) )
+	TL.Print( "Screen Capture every "..SecondsToTime(TL_Options.Delay,false,false,5).."("..( TL_Options.Enabled and "Enabled" or "Disabled" )..")" )
 end
 -- this needs to be at the end because it is referencing functions
 TL.CommandList = {

@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  May 9 2022
--- Revision:  9.0.3
+-- Date    :  March 8 2023
+-- Revision:  9.0.3-6-gc0d8064-100002
 -----------------------------------------
 -- These are functions from wow that have been needed by addons so far
 -- Not a complete list of the functions.
@@ -214,6 +214,8 @@ globals.FACTION_STANDING_LABEL7 = "Revered"
 globals.FACTION_STANDING_LABEL8 = "Exalted"
 
 COMBATLOG_OBJECT_AFFILIATION_OUTSIDER = 8
+COMBATLOG_XPGAIN_FIRSTPERSON = "%s dies, you gain %d experience."
+COMBATLOG_XPGAIN_EXHAUSTION1 = "%s dies, you gain %d experience. (%s exp %s bonus)"
 
 --			TT.fName, TT.fDescription, TT.fStandingId, TT.fBottomValue, TT.fTopValue, TT.fEarnedValue, TT.fAtWarWith,
 --					TT.fCanToggleAtWar, TT.fIsHeader, TT.fIsCollapsed, TT.fIsWatched, TT.isChild, TT.factionID,
@@ -391,14 +393,15 @@ Frame = {
 		["GetHeight"] = function(self) return( self.height ); end,
 		["CreateFontString"] = function(self, ...) return(CreateFontString(...)) end,
 
-		["SetMinMaxValues"] = function() end,
-		["SetValue"] = function() end,
+		["SetMinMaxValues"] = function(self, min, max) self.min=min; self.max=max; end,
+		["SetValue"] = function(self, value) self.value=value end,
 		["SetStatusBarColor"] = function() end,
 		["SetScript"] = function() end,
 		["SetAttribute"] = function() end,
 
 		["SetChecked"] = function() end,
-		["SetText"] = function() end,
+		["SetText"] = function(self, textIn) self.textValue = textIn; end,
+		["GetText"] = function(self) return( self.textValue ); end,
 }
 FrameGameTooltip = {
 		["HookScript"] = function( self, callback ) end,
@@ -788,9 +791,19 @@ function GetCoinTextureString( copperIn, fontHeight )
 				(copper and copper.."C"))
 	end
 end
-function GetContainerItemLink( bagId, slotId )
+
+
+C_Container = {}
+C_Container.SortBagsRightToLeft = false -- this is normal
+function C_Container.GetContainerItemInfo( bagId, slotId )
 end
-function GetContainerNumFreeSlots( bagId )
+function C_Container.GetContainerItemLink( bagId, slotId )
+end
+function C_Container.GetBagSlotFlag( bagId, filterFlagCheck )
+	-- returns true if the filterFlagCheck matches the bag's filterFlag
+	return true
+end
+function C_Container.GetContainerNumFreeSlots( bagId )
 	-- http://www.wowwiki.com/API_GetContainerNumFreeSlots
 	-- http://www.wowwiki.com/BagType
 	-- returns numberOfFreeSlots, BagType
@@ -803,7 +816,7 @@ function GetContainerNumFreeSlots( bagId )
 		return 0, 0
 	end
 end
-function GetContainerNumSlots( bagId )
+function C_Container.GetContainerNumSlots( bagId )
 	-- http://wowwiki.wikia.com/wiki/API_GetContainerNumSlots
 	-- returns the number of slots in the bag, or 0 if no bag
 	if bagInfo[bagId] then
@@ -812,9 +825,10 @@ function GetContainerNumSlots( bagId )
 		return 0
 	end
 end
-function GetBagSlotFlag( bagId, filterFlagCheck )
-	-- returns true if the filterFlagCheck matches the bag's filterFlag
-	return true
+function C_Container.GetSortBagsRightToLeft()
+	return C_Container.SortBagsRightToLeft
+end
+function C_Container.UseContainerItem( bagId, slotId )
 end
 function GetEquipmentSetItemIDs( setName )
 	-- http://wowprogramming.com/docs/api/GetEquipmentSetItemIDs
@@ -1186,6 +1200,8 @@ function IsInRaid()
 	-- myParty = { ["group"] = nil, ["raid"] = nil } -- set one of these to true to reflect being in group or raid.
 	return ( myParty["raid"] and 1 or nil )
 end
+function GetCursorInfo()
+end
 function GetInstanceInfo()
 	-- https://wowwiki.fandom.com/wiki/API_GetInstanceInfo
 	-- name, type, difficultyIndex, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
@@ -1196,6 +1212,9 @@ function GetInstanceInfo()
 end
 function GetDifficultyInfo( diffInt )
 	return dungeonDifficultyLookup[diffInt]
+end
+function GetFramerate()
+	return 8
 end
 function IsResting()
 	return true
@@ -1600,6 +1619,14 @@ function C_CurrencyInfo.GetCurrencyLink( id )
 	end
 end
 
+Enum = {}
+Enum.TooltipDataType = {}
+Enum.TooltipDataType.Item = 0
+
+TooltipDataProcessor = {}
+function TooltipDataProcessor.AddTooltipPostCall()
+end
+
 -----------------------------------------
 -- TOC functions
 addonData = {}
@@ -1614,9 +1641,9 @@ function ParseTOC( tocFile, useRequire )
 		while true do
 			local linestart, lineend, line = string.find( tocContents, "(.-)\n" )
 			if linestart then
-				local lua, luaEnd, luaFile = string.find( line, "([%a]*)%.lua" )
-				local xml, xmlEnd, xmlFile = string.find( line, "([%a]*)%.xml" )
-				local hash, hashEnd, hashKey, hashValue = string.find( line, "## ([%a]*): (.*)" )
+				local lua, luaEnd, luaFile = string.find( line, "([_%a]*)%.lua" )
+				local xml, xmlEnd, xmlFile = string.find( line, "([_%a]*)%.xml" )
+				local hash, hashEnd, hashKey, hashValue = string.find( line, "## ([_%a]*): (.*)" )
 				if( hash ) then
 					addonData[ hashKey ] = hashValue
 				elseif( lua ) then
