@@ -42,7 +42,7 @@ function test.test_SetDelay_0()
 	assertEquals(1, TL_Options.Delay )
 end
 function test.test_SetDelay_Nil()
-	TL_Options.Delay = 60;
+	TL_Options.Delay = 60
 	TL.command("delay")
 	assertEquals( 60, TL_Options.Delay )
 end
