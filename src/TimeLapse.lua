@@ -131,8 +131,8 @@ TL.CommandList = {
 		["alias"] = "enable",
 	},
 	["delay"] = {
-		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL.Status(); end; end,
-		["help"] = {"Integer","Set the capture delay to number of seconds"}
+		["func"] = function(param) param = tonumber(param); if param then if param<=0 then param=1 end;	TL_Options.Delay = param; TL_Options.Enabled = 1; end; TL.Status(); end,
+		["help"] = {"Integer","Set the capture delay to number of seconds. Setting a value enables, no value just reports."}
 	},
 }
 
