@@ -34,6 +34,13 @@ function test.test_SetOn()
 	TL.command("on")
 	assertTrue( TL_Options.Enabled )
 end
+function test.test_SetOn_withDelay()
+	TL_Options.Enabled = nil
+	TL_Options.Delay = 1
+	TL.command("on 60")
+	assertEquals( 60, TL_Options.Delay )
+	assertTrue( TL_Options.Enabled )
+end
 function test.test_Status()
 	TL.command("status")
 end
@@ -50,6 +57,7 @@ function test.test_SetDelay_180()
 	TL.command("delay 180")
 	assertEquals( 180, TL_Options.Delay )
 end
+
 function test.test_Help()
 	TL.command("help")
 end
