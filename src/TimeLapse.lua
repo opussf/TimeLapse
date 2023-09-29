@@ -81,7 +81,11 @@ function TL.command(msg)
 	if cmdFunc then
 		cmdFunc.func(param)
 	else
-		TL.PrintHelp()
+		if cmd then
+			TL.CommandList.enable.func( tonumber(cmd) )
+		else
+			TL.PrintHelp()
+		end
 	end
 end
 function TL.PrintHelp()
