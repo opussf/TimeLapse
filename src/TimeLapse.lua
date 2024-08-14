@@ -1,7 +1,7 @@
 TIMELAPSE_SLUG, TL = ...
-TIMELAPSE_MSG_ADDONNAME = GetAddOnMetadata( TIMELAPSE_SLUG, "Title" )
-TIMELAPSE_MSG_VERSION   = GetAddOnMetadata( TIMELAPSE_SLUG, "Version" )
-TIMELAPSE_MSG_AUTHOR    = GetAddOnMetadata( TIMELAPSE_SLUG, "Author" )
+TIMELAPSE_MSG_ADDONNAME = C_AddOns.GetAddOnMetadata( TIMELAPSE_SLUG, "Title" )
+TIMELAPSE_MSG_VERSION   = C_AddOns.GetAddOnMetadata( TIMELAPSE_SLUG, "Version" )
+TIMELAPSE_MSG_AUTHOR    = C_AddOns.GetAddOnMetadata( TIMELAPSE_SLUG, "Author" )
 
 -- Colours
 COLOR_RED = "|cffff0000"
